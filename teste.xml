@@ -1,0 +1,20 @@
+<tabela>
+    <registro>
+        <idFunc>1</idFunc>
+        <nome>Ana</nome>
+        <idade>24</idade>
+        <salario>1500</salario>
+    </registro>
+    <registro>
+        <idFunc>2</idFunc>
+        <nome>Bruno</nome>
+        <idade>25</idade>
+        <salario>2000</salario>
+    </registro>
+    <registro>
+        <idFunc>3</idFunc>
+        <nome>Carlos</nome>
+        <idade>30</idade>
+        <salario>2500</salario>
+    </registro>
+</tabela>
