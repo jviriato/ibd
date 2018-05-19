@@ -1,0 +1,3 @@
+idFunc:99, nome:Zelda, idade:34, salario:8000
+idFunc:98, nome:Yago, idade:52, salario:5000
+idFunc:96, nome:Wilson, idade:34, salario:2000

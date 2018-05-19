@@ -13,6 +13,15 @@ public class Registro {
         dado  = new ArrayList<>();
     }
 
+    public int getFieldCount(){
+        return campo.size();
+    }
+    public String getFieldName(int index){
+        return campo.get(index);
+    }
+    public String getFieldValue(int index){
+        return dado.get(index);
+    }
     
     public Registro(String c, String d) {
         this.campo.add(c);
@@ -29,8 +38,5 @@ public class Registro {
             System.out.println(campo.get(i) + ": " + dado.get(i));
         }
         System.out.println("");
-    }
-    public int getFieldCount(){
-        return this.campo.size();
     }
 }

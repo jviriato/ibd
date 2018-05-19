@@ -8,8 +8,7 @@ import java.util.regex.Pattern;
 import registro.Registro;
 
 public class Iterator {
-    List<Registro> regs = new ArrayList<>();
-    
+    public List<Registro> regs = new ArrayList<>();
     public void open(String path) throws FileNotFoundException, IOException{
         try(RandomAccessFile raf = new RandomAccessFile(path, "r")){
             raf.seek(0);
