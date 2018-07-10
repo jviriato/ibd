@@ -1,7 +1,6 @@
 package iterator;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import registro.Registro;
@@ -11,35 +10,45 @@ import registro.Registro;
  * @author viriato
  */
 public class ExtratorXML extends Iterator {
+    private String Nome_tabela;
+    
     @Override
-    public Registro next(RandomAccessFile raf) throws IOException{
-        String linha = "";
-        String regex_registro_inicio = "^([' ']*(<registro>))";
-        String regex_registro_fim = "^([' ']*(</registro>))";
-        String regex_campos = "^([' ']*<[\\w]*>)([\\w]*)(</[\\w]*>)";
-        Registro reg = new Registro();
-        boolean dentro_do_registro = false;
-        try {
-            while ((linha = raf.readLine()) != null) {
-                if(linha.matches(regex_registro_inicio)){
-                    dentro_do_registro = true;
-                }
-                else if(linha.matches(regex_registro_fim)){
-                    dentro_do_registro = false;
-                    break;
-                }
-                else if(dentro_do_registro){
-                    Pattern pattern = Pattern.compile(regex_campos);
-                    Matcher matcher = pattern.matcher(linha.trim());
-                    while(matcher.find()){
-                        trataRegistro(matcher.group(1), matcher.group(2), matcher.group(3), reg);
-                    }
-                }
-            }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        return reg;
+    public void open(String p) throws FileNotFoundException, IOException{
+        try { 
+            this.raf = new RandomAccessFile(new File(p), "r");
+            
+            this.Nome_tabela = this.raf.readLine();
+            this.Nome_tabela = this.Nome_tabela.substring(this.Nome_tabela.indexOf("<")+1, this.Nome_tabela.indexOf(">"));
+            
+            this.init = this.raf.getFilePointer();
+            this.reg_ant = this.raf.getFilePointer();
+            
+        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
+        }
+    }
+    
+    @Override    
+    public Registro next() throws IOException{
+        if(!this.hasNext()) return null;
+        this.reg_ant = this.raf.getFilePointer();
+        String final_ = this.raf.readLine();
+        
+        final_ = "</" + final_.substring(final_.indexOf("<")+1, final_.indexOf(">")) + ">";
+        
+        ArrayList<String> c = new ArrayList<>(); 
+        ArrayList<String> v = new ArrayList<>();
+        
+        String procura = raf.readLine(); 
+        while(!procura.contains(final_)) {
+            c.add(procura.substring(procura.indexOf("<")+1, procura.indexOf(">"))); 
+            v.add(procura.substring(procura.indexOf(">")+1, procura.indexOf("</")));                      
+            
+            procura = raf.readLine();
+        }
+        Registro ret = new Registro(c, v); 
+         
+        return ret;
     }
     public void trataRegistro(String campoInit, String dado, String campoFim, Registro reg){
         if(registroEhValido(campoInit, campoFim)){
@@ -55,20 +64,20 @@ public class ExtratorXML extends Iterator {
 
     
     @Override
-    public boolean hasNext(RandomAccessFile raf) throws IOException{
-        long fp = raf.getFilePointer();
-        String linha = "";
+    public boolean hasNext() throws IOException{
+        long pos = 0;
+        String teste = null;
         try {
-            if ((linha = raf.readLine()) != null) {
-                raf.seek(fp);
+            pos = this.raf.getFilePointer();
+            teste = raf.readLine();
+        } catch (IOException ex) {}
+        
+        if(teste == null) return false;
+        if(!teste.contains(this.Nome_tabela)) {
+            try {
+                this.raf.seek(pos);
                 return true;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException ex) {}
         }
-        raf.seek(fp);
         return false;
-
     }
-
-}

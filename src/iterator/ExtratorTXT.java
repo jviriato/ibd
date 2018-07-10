@@ -1,7 +1,5 @@
 package iterator;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import registro.Registro;
@@ -12,12 +10,12 @@ import registro.Registro;
  */
 public class ExtratorTXT extends Iterator {
     @Override
-    public Registro next(RandomAccessFile raf) throws IOException{
+    public Registro next() throws IOException{
         String linha = "";
         String regex = "([\\w]*:)([\\w]*)";
         Registro reg = new Registro();
         try {
-            while ((linha = raf.readLine()) != null) {
+            while ((linha = this.raf.readLine()) != null) {
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(linha);
                 while(matcher.find()){
@@ -27,23 +25,23 @@ public class ExtratorTXT extends Iterator {
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.getStackTrace();
         }
         return reg;
     }
     @Override
-    public boolean hasNext(RandomAccessFile raf) throws IOException{
-        long fp = raf.getFilePointer();
+    public boolean hasNext() throws IOException{
+        long fp = this.raf.getFilePointer();
         String linha = "";
         try {
-            if ((linha = raf.readLine()) != null) {
-                raf.seek(fp);
+            if ((linha = this.raf.readLine()) != null) {
+                this.raf.seek(fp);
                 return true;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.getStackTrace();
         }
-        raf.seek(fp);
+        this.raf.seek(fp);
         return false;
 
     }

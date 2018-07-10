@@ -1,48 +1,45 @@
 
 package iterator;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import registro.Registro;
 
 public abstract class Iterator {
-    public List<Registro> regs = new ArrayList<>();
-    public void open(String path) throws FileNotFoundException, IOException{
-        try(RandomAccessFile raf = new RandomAccessFile(path, "r")){
-            raf.seek(0);
-            run(raf);
+    public RandomAccessFile raf;
+    public String path;
+    public long init;
+    public long reg_ant;
+    public void open(String p) throws FileNotFoundException, IOException{
+        this.raf = new RandomAccessFile(p, "r");
+        this.raf.seek(0);
+        this.path = p;
+        this.init = this.raf.getFilePointer();
+        this.reg_ant = this.raf.getFilePointer();
+    }
+    public abstract Registro next() throws IOException;
+    public abstract boolean hasNext() throws IOException;
+
+    public void run() throws IOException{
+        while(hasNext()){
+            Registro reg = next();
+            String r = reg.retornaCampos();
+            System.out.println(r);
+        }
+    }
+
+
+    public void close() throws IOException{
+        try{
+            this.raf.close();
         }catch(IOException e){
             e.getStackTrace();
         }
-        
     }
-
-    public abstract Registro next(RandomAccessFile raf) throws IOException;
-    public abstract boolean hasNext(RandomAccessFile raf) throws IOException;
-    public void printaCampos()
-    {
-        for(Registro r : regs){
-            for(int i = 0; i < r.getFieldCount(); i++){
-                System.out.println(r.getFieldName(i) + ": " + r.getFieldValue(i));
-            }
-            System.out.println("");
-        }
-        
+    
+    public void reset() throws IOException{
+        this.raf.seek(this.init);
     }
-    public void run(RandomAccessFile raf) throws IOException{
-        Registro reg = next(raf);
-        regs.add(reg);
-        while(hasNext(raf)){
-            reg = next(raf);
-            regs.add(reg);
-        }
-        printaCampos();
-    }
-
-
-    public void close(RandomAccessFile raf) throws IOException{
-        raf.close();
+    
+    public void fp_back() throws IOException{
+        this.raf.seek(this.reg_ant);
     }
 }

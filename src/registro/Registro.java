@@ -5,14 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Registro {
-    List<String> campo = new ArrayList<>();
-    List<String> dado  = new ArrayList<>();
+    List<String> campo;
+    List<String> dado;
 
     public Registro() {
         campo = new ArrayList<>();
         dado  = new ArrayList<>();
     }
-
+    public Registro(List<String> Nome_Campos, List<String> Valores_Campos) {
+        this.campo = Nome_Campos;
+        this.dado = Valores_Campos;
+    }
+    
     public int getFieldCount(){
         return campo.size();
     }
@@ -32,11 +36,13 @@ public class Registro {
         this.campo.add(c);
         this.dado.add(d);
     }
-    
-    public void printaCampos(){
+
+    public String retornaCampos(){
+        String reg = "";
         for(int i = 0; i < campo.size(); i++){
-            System.out.println(campo.get(i) + ": " + dado.get(i));
+            reg += campo.get(i) + ": " + dado.get(i);
+            reg += "\n";
         }
-        System.out.println("");
+        return reg;
     }
 }
