@@ -1,1 +1,0 @@
-idFunc:3, idade:34, salario:4000
