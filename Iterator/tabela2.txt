@@ -1,0 +1,3 @@
+idFunc:4, depto:Inf
+idFunc:3, depto:Mat
+idFunc:2, depto:Mat

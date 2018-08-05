@@ -1,0 +1,18 @@
+<tabela>
+    <registro>
+        <idFunc>1</idFunc>
+        <nome>Ana</nome>
+    </registro>
+    <registro>
+        <idFunc>2</idFunc>
+        <nome>Ze</nome>
+    </registro>
+    <registro>
+        <idFunc>3</idFunc>
+        <nome>Jo</nome>
+    </registro>
+    <registro>
+        <idFunc>4</idFunc>
+        <nome>Paulo</nome>
+    </registro>
+</tabela>
